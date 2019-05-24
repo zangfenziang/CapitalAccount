@@ -19,7 +19,19 @@ public class CapitalAccountLegalUser {
     private String authorize_address;
     private String authorize_phone;
 
-    public CapitalAccountLegalUser(String account_id, String legal_num, String license_num, String legal_name, String legal_id_num, String legal_address, String legal_phone, String authorize_name, String authorize_id_num, String authorize_address, String authorize_phone) {
+    public CapitalAccountLegalUser(){}
+
+    public CapitalAccountLegalUser(String account_id
+            , String legal_num
+            , String license_num
+            , String legal_name
+            , String legal_id_num
+            , String legal_address
+            , String legal_phone
+            , String authorize_name
+            , String authorize_id_num
+            , String authorize_address
+            , String authorize_phone) {
         this.account_id = account_id;
         this.legal_num = legal_num;
         this.license_num = license_num;

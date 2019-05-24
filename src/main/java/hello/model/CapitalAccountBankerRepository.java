@@ -9,5 +9,5 @@ public interface CapitalAccountBankerRepository extends CrudRepository<CapitalAc
     @Query(value = "select p from CapitalAccountBanker p where p.id = ?1 and p.password = ?2")
     List<CapitalAccountBanker> getBankerLogin(String id, String password);
     @Query(value = "select p from CapitalAccountBanker p where p.id = ?1")
-    List<CapitalAccountBanker> getBankerLoginById(String id);
+    List<CapitalAccountBanker> getBankerById(String id);
 }

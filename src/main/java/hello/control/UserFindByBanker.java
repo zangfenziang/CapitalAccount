@@ -4,18 +4,26 @@ import hello.model.CapitalAccountUser;
 
 public class UserFindByBanker {
     private int status;
-    private Iterable<CapitalAccountUser> iterable;
+    private CapitalAccountUser user;
 
-    public UserFindByBanker(int status, Iterable<CapitalAccountUser> iterable){
+    public UserFindByBanker(int status, CapitalAccountUser user) {
         this.status = status;
-        this.iterable = iterable;
+        this.user = user;
     }
 
     public int getStatus() {
         return status;
     }
 
-    public Iterable<CapitalAccountUser> getIterable() {
-        return iterable;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public CapitalAccountUser getUser() {
+        return user;
+    }
+
+    public void setUser(CapitalAccountUser user) {
+        this.user = user;
     }
 }
