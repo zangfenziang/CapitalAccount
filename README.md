@@ -40,7 +40,7 @@ example:
       user_id 
       user_password
       remember_status
-- OutPut:
+- Output:
 
       status
       message
@@ -59,7 +59,7 @@ example:
 - Input:
 
       account_id
-- OutPut:
+- Output:
 
       status
       user(password="")
@@ -71,7 +71,7 @@ example:
       account_id
       password
       account_type
-- OutPut:
+- Output:
 
       status
       message
@@ -81,7 +81,7 @@ example:
 - Input:
 
       account_id
-- OutPut:
+- Output:
 
       status
       message
@@ -91,7 +91,7 @@ example:
 - Input:
 
       account_id
-- OutPut:
+- Output:
 
       status
       message
@@ -101,7 +101,7 @@ example:
 - Input:
 
       account_id
-- OutPut:
+- Output:
 
       status
       message
@@ -122,7 +122,7 @@ example:
       phone_num
       agency
       agent_id_num
-- OutPut:
+- Output:
 
       status
       message
@@ -132,7 +132,7 @@ example:
 - Input:
 
       account_id
-- OutPut:
+- Output:
 
       account_id
       name
@@ -162,7 +162,7 @@ example:
       authorize_id_num
       authorize_address
       authorize_phone
-- OutPut:
+- Output:
 
       status
       message
@@ -172,7 +172,7 @@ example:
 - Input:
 
       account_id
-- OutPut:
+- Output:
 
       account_id
       legal_num
@@ -193,7 +193,7 @@ example:
       account_id 
       password
       remember_status
-- OutPut:
+- Output:
 
       status
       message
@@ -201,7 +201,7 @@ example:
 ### /user_login_status 
 - 用户是否已经登陆
 - Input:
-- OutPut:
+- Output:
 
       status
       message
