@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
 @RestController
 public class StockController {
 
@@ -85,7 +85,7 @@ public class StockController {
         List<CapitalAccountBanker> list = capitalAccountBankerRepository.getBankerById(id);
         for (CapitalAccountBanker banker: list) {
             if (cookie.equals(getBankStockCookie(banker.getId(), banker.getPassword()))) {
-                return new SimpleStatus(0, "success");
+                return new SimpleStatus(0, id);
             }
         }
         return new SimpleStatus(3, "please login again");
@@ -338,7 +338,7 @@ public class StockController {
         List<CapitalAccountUser> list = capitalAccountUserRepository.getUserById(id);
         for (CapitalAccountUser banker: list) {
             if (banker.getStatus().equals(NormalStatus) && cookie.equals(getBankStockCookie(banker.getAccount_id(), banker.getPassword()))) {
-                return new SimpleStatus(0, "success");
+                return new SimpleStatus(0, id);
             }
         }
         return new SimpleStatus(3, "please login again");
