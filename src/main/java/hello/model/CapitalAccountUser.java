@@ -7,9 +7,7 @@ import javax.persistence.Id;
 public class CapitalAccountUser {
     @Id
     private String account_id;
-    private String password;
     private String account_type;
-    private String status;
 
     public String getAccount_id() {
         return account_id;
@@ -19,27 +17,11 @@ public class CapitalAccountUser {
         this.account_id = account_id;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getAccount_type() {
         return account_type;
     }
 
     public void setAccount_type(String account_type) {
         this.account_type = account_type;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
