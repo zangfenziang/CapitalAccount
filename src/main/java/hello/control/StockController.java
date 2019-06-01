@@ -133,6 +133,27 @@ public class StockController {
         return account;
     }
 
+    @Transactional
+    @RequestMapping("/account_set_login_pwd")
+    public SimpleStatus setAccountLoginPWD(@CookieValue(value = AccountCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = AccountCookieName, defaultValue = "") String cookie
+            , @RequestParam String login_pwd
+            , @RequestParam String old_login_pwd){
+        try{
+            CapitalAccount account = getAccount(id, cookie);
+            login_pwd = DigestUtils.md5DigestAsHex(login_pwd.getBytes());
+            old_login_pwd = DigestUtils.md5DigestAsHex(old_login_pwd.getBytes());
+            if (!old_login_pwd.equals(account.getLogin_pwd())){
+                return new SimpleStatus(1, "old password incorrect");
+            }
+            account.setLogin_pwd(login_pwd);
+            return new SimpleStatus(0, "success");
+        }
+        catch (Exception e){
+            return new SimpleStatus(3, e.getMessage());
+        }
+    }
+
     @RequestMapping("/account_fund")
     public SimpleStatus getAccountFund(@CookieValue(value = AccountCookieIdName, defaultValue = "") String id
             , @CookieValue(value = AccountCookieName, defaultValue = "") String cookie){
