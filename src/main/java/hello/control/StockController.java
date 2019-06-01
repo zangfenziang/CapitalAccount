@@ -187,6 +187,30 @@ public class StockController {
         }
     }
 
+    @RequestMapping("/account_find_by_banker")
+    public CapitalAccount getAccountByBankerPublic(@CookieValue(value = BankerCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie
+            , @RequestParam String user_id){
+        SimpleStatus status = getBankerLoginStatus(id, cookie);
+        if (status.getStatus() != 0){
+            return new CapitalAccount();
+        }
+        List<CapitalAccount> list = capitalAccountRepository.getAccount(user_id);
+        if (list.size() == 0){
+            return new CapitalAccount();
+        }
+        CapitalAccount account = list.get(0);
+        CapitalAccount capitalAccount = new CapitalAccount();
+        capitalAccount.setUser_id(account.getUser_id());
+        capitalAccount.setLogin_pwd("");
+        capitalAccount.setStatus(account.getStatus());
+        capitalAccount.setSecurities_id(account.getSecurities_id());
+        capitalAccount.setFund(account.getFund());
+        capitalAccount.setID(account.getID());
+        capitalAccount.setUser_right(account.getUser_right());
+        return capitalAccount;
+    }
+
     @RequestMapping("/user_find_by_banker")
     public UserFindByBanker getUserByBankerPublic(@CookieValue(value = BankerCookieIdName, defaultValue = "") String id
             , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie

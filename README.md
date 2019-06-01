@@ -37,8 +37,8 @@ example:
 - 管理员登陆
 - Input:
 
-      user_id 
-      user_password
+      id 
+      password
       remember_status
 - Output:
 
@@ -186,3 +186,18 @@ example:
 
       status
       message
+      
+### /account_find_by_banker
+- Input:
+
+      user_id
+- Output:
+
+      user_id
+      securities_id
+      login_pwd
+      user_right
+      status
+      fund
+      id
+      
