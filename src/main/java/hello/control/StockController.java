@@ -24,11 +24,9 @@ public class StockController {
     private final static String BankerCookieIdName = "BankerStockCookieId";
     private final static String AccountCookieName = "UserStockCookie";
     private final static String AccountCookieIdName = "UserStockCookieId";
-    private final static String LegalUserType = "Legal";
-    private final static String PersonalUserType = "Personal";
-    private final static String LogoutType = "Logout";
-    private final static String FrozenStatus = "Frozen";
+    private final static String LockStatus = "Lock";
     private final static String NormalStatus = "Normal";
+    private final static double eps = 1e-6;
 
     @Autowired
     private CapitalAccountBankerRepository capitalAccountBankerRepository;
@@ -167,4 +165,144 @@ public class StockController {
             return new SimpleStatus(3, e.getMessage());
         }
     }
+
+    @RequestMapping("/user_find_by_banker")
+    public UserFindByBanker getUserByBankerPublic(@CookieValue(value = BankerCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie
+            , @RequestParam String account_id){
+        SimpleStatus status = getBankerLoginStatus(id, cookie);
+        List<CapitalAccountUser> list;
+        if (status.getStatus() == 0){
+            list = capitalAccountUserRepository.getUserById(account_id);
+            if (list.size() > 0) {
+                CapitalAccountUser user = list.get(0);
+                return new UserFindByBanker(0, user);
+            }
+        }
+        return new UserFindByBanker(1, new CapitalAccountUser());
+    }
+
+    @RequestMapping("/personal_user_find_by_banker")
+    public CapitalAccountPersonalUser getPersonalUserByBanker(@CookieValue(value = BankerCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie
+            , @RequestParam String account_id){
+        SimpleStatus status = getBankerLoginStatus(id, cookie);
+        if (status.getStatus() != 0){
+            return new CapitalAccountPersonalUser();
+        }
+        List<CapitalAccountPersonalUser> list = capitalAccountPersonalUserRepository.findByAccountId(account_id);
+        if (list.size() == 0){
+            return new CapitalAccountPersonalUser();
+        }
+        return list.get(0);
+    }
+
+    @RequestMapping("/legal_user_find_by_banker")
+    public CapitalAccountLegalUser getLegalUserByBanker(@CookieValue(value = BankerCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie
+            , @RequestParam String account_id){
+        if (getBankerLoginStatus(id, cookie).getStatus() != 0) {
+            return new CapitalAccountLegalUser();
+        }
+        List<CapitalAccountLegalUser> list = capitalAccountLegalUserRepository.findByAccountId(account_id);
+        if (list.size() == 0){
+            return new CapitalAccountLegalUser();
+        }
+        return list.get(0);
+    }
+
+    @RequestMapping("/account_add_by_banker")
+    public SimpleStatus addAccount(@CookieValue(value = BankerCookieIdName, defaultValue = "") String cookie_id
+            , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie
+            , @RequestParam String user_id
+            , @RequestParam String id
+            , @RequestParam String login_pwd
+            , @RequestParam String securities_id){
+        SimpleStatus status = getBankerLoginStatus(cookie_id, cookie);
+        if (status.getStatus() != 0){
+            return status;
+        }
+        if (capitalAccountRepository.getAccount(user_id).size() != 0){
+            return new SimpleStatus(1, "account exists");
+        }
+        if (capitalAccountUserRepository.getUserById(securities_id).size() == 0){
+            return new SimpleStatus(2, "securities_id not exists");
+        }
+        login_pwd = DigestUtils.md5DigestAsHex(login_pwd.getBytes());
+        CapitalAccount account = new CapitalAccount();
+        account.setUser_id(user_id);
+        account.setID(id);
+        account.setFund(new BigDecimal(0));
+        account.setLogin_pwd(login_pwd);
+        account.setSecurities_id(securities_id);
+        account.setStatus(NormalStatus);
+        capitalAccountRepository.save(account);
+        return new SimpleStatus(0, "success");
+    }
+
+    private CapitalAccount getAccountByBanker(String id, String cookie, String user_id) throws Exception {
+        SimpleStatus status = getBankerLoginStatus(id, cookie);
+        if (status.getStatus() != 0){
+            throw new Exception(status.getMessage());
+        }
+        List<CapitalAccount> list = capitalAccountRepository.getAccount(user_id);
+        if (list.size() == 0){
+            throw new Exception("account not found");
+        }
+        return list.get(0);
+    }
+
+    @RequestMapping("/account_logout_by_banker")
+    public SimpleStatus deleteAccount(@CookieValue(value = BankerCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie
+            , @RequestParam String user_id){
+        try{
+            CapitalAccount account = getAccountByBanker(id, cookie, user_id);
+            if (account.getFund().abs().doubleValue() > eps){
+                return new SimpleStatus(2, "fund not equal zero");
+            }
+            capitalAccountRepository.delete(account);
+            return new SimpleStatus(0, "success");
+        }
+        catch (Exception e){
+            return new SimpleStatus(1, e.getMessage());
+        }
+    }
+
+    private SimpleStatus setAccountStatus(CapitalAccount account, String fromStatus, String toStatus){
+        if (!account.getStatus().equals(fromStatus)){
+            return new SimpleStatus(2, "account status is " + account.getStatus());
+        }
+        account.setStatus(toStatus);
+        return new SimpleStatus(0, "success");
+    }
+
+    @Transactional
+    @RequestMapping("/account_lock_by_banker")
+    public SimpleStatus lockAccount(@CookieValue(value = BankerCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie
+            , @RequestParam String user_id){
+        try{
+            CapitalAccount account = getAccountByBanker(id, cookie, user_id);
+            return setAccountStatus(account, NormalStatus, LockStatus);
+        }
+        catch (Exception e){
+            return new SimpleStatus(1, e.getMessage());
+        }
+    }
+
+    @Transactional
+    @RequestMapping("/account_unlock_by_banker")
+    public SimpleStatus unlockAccount(@CookieValue(value = BankerCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = BankerCookieName, defaultValue = "") String cookie
+            , @RequestParam String user_id){
+        try{
+            CapitalAccount account = getAccountByBanker(id, cookie, user_id);
+            return setAccountStatus(account, LockStatus, NormalStatus);
+        }
+        catch (Exception e){
+            return new SimpleStatus(1, e.getMessage());
+        }
+    }
+
 }
