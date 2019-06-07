@@ -201,3 +201,18 @@ example:
       fund
       id
       
+### /account_freezing_fund_change
+- Input:
+
+      number
+- Output:
+      status
+      message
+      
+### /account_freezing_fund
+- Input:
+- Output:
+     
+      status
+      message
+      

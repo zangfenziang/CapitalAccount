@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 21, 2019 at 11:19 AM
+-- Generation Time: Jun 07, 2019 at 12:55 AM
 -- Server version: 10.2.22-MariaDB
 -- PHP Version: 7.2.18
 
@@ -21,6 +21,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `stock`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `capital_account`
+--
+
+CREATE TABLE `capital_account` (
+  `user_id` varchar(255) NOT NULL,
+  `id` varchar(255) DEFAULT NULL,
+  `fund` decimal(10,2) DEFAULT NULL,
+  `freezing` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `login_pwd` varchar(255) DEFAULT NULL,
+  `securities_id` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `user_right` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `capital_account`
+--
+
+INSERT INTO `capital_account` (`user_id`, `id`, `fund`, `freezing`, `login_pwd`, `securities_id`, `status`, `user_right`) VALUES
+('zfx', '111', '0.00', '10.00', '202cb962ac59075b964b07152d234b70', 'zfxzfx', 'Normal', NULL),
+('account_add_by_banker', 'account_add_by_banker', '0.00', '0.00', 'b0ab9e6f55266a972952be23031a4235', 'zfxzfxzfx', 'Normal', NULL);
 
 -- --------------------------------------------------------
 
@@ -61,6 +86,13 @@ CREATE TABLE `capital_account_legal_user` (
   `license_num` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `capital_account_legal_user`
+--
+
+INSERT INTO `capital_account_legal_user` (`account_id`, `authorize_address`, `authorize_id_num`, `authorize_name`, `authorize_phone`, `legal_address`, `legal_id_num`, `legal_name`, `legal_num`, `legal_phone`, `license_num`) VALUES
+('zfxzfx', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1');
+
 -- --------------------------------------------------------
 
 --
@@ -82,6 +114,13 @@ CREATE TABLE `capital_account_personal_user` (
   `phone_num` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `capital_account_personal_user`
+--
+
+INSERT INTO `capital_account_personal_user` (`account_id`, `address`, `agency`, `agent_id_num`, `date`, `degree`, `gender`, `id_num`, `job`, `name`, `organization`, `phone_num`) VALUES
+('zfxzfxzfx', '11', b'1', 'dd', '2019-06-02 00:00:00', 'wer', 'werw', 'wer', 'erwer', 'wer', 'wer', 'we');
+
 -- --------------------------------------------------------
 
 --
@@ -90,14 +129,26 @@ CREATE TABLE `capital_account_personal_user` (
 
 CREATE TABLE `capital_account_user` (
   `account_id` varchar(255) NOT NULL,
-  `account_type` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL
+  `account_type` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `capital_account_user`
+--
+
+INSERT INTO `capital_account_user` (`account_id`, `account_type`) VALUES
+('zfxzfx', 'Legal'),
+('zfxzfxzfx', 'Personal');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `capital_account`
+--
+ALTER TABLE `capital_account`
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- Indexes for table `capital_account_banker`
