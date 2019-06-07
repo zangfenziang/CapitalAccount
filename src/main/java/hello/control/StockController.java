@@ -166,6 +166,18 @@ public class StockController {
         }
     }
 
+    @RequestMapping("/account_freezing_fund")
+    public SimpleStatus getAccountFreezingFund(@CookieValue(value = AccountCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = AccountCookieName, defaultValue = "") String cookie){
+        try{
+            CapitalAccount account = getAccount(id, cookie);
+            return new SimpleStatus(0, account.getFreezing().toString());
+        }
+        catch (Exception e){
+            return new SimpleStatus(3, e.getMessage());
+        }
+    }
+
     @Transactional
     @RequestMapping("/account_fund_change")
     public SimpleStatus setAccountFund(@CookieValue(value = AccountCookieIdName, defaultValue = "") String id
@@ -180,6 +192,33 @@ public class StockController {
             BigDecimal delta = new BigDecimal(number);
             BigDecimal result = fund.add(delta);
             account.setFund(result);
+            return new SimpleStatus(0, "success");
+        }
+        catch (Exception e){
+            return new SimpleStatus(3, e.getMessage());
+        }
+    }
+
+    @Transactional
+    @RequestMapping("/account_freezing_fund_change")
+    public SimpleStatus setAccountFreezingFund(@CookieValue(value = AccountCookieIdName, defaultValue = "") String id
+            , @CookieValue(value = AccountCookieName, defaultValue = "") String cookie
+            , @RequestParam double number){
+        try{
+            CapitalAccount account = getAccount(id, cookie);
+            BigDecimal fund = account.getFund();
+            BigDecimal freezing = account.getFreezing();
+            if (fund.doubleValue() - number < 0){
+                return new SimpleStatus(4, "fund less than freezing number");
+            }
+            if (freezing.doubleValue() + number < 0){
+                return new SimpleStatus(4, "freezing fund less than freezing number");
+            }
+            BigDecimal delta = new BigDecimal(number);
+            BigDecimal fund_result = fund.subtract(delta);
+            BigDecimal freezing_result = account.getFreezing().add(delta);
+            account.setFund(fund_result);
+            account.setFreezing(freezing_result);
             return new SimpleStatus(0, "success");
         }
         catch (Exception e){
@@ -303,7 +342,7 @@ public class StockController {
             , @RequestParam String user_id){
         try{
             CapitalAccount account = getAccountByBanker(id, cookie, user_id);
-            if (account.getFund().abs().doubleValue() > eps){
+            if (account.getFund().abs().doubleValue() > eps || account.getFreezing().abs().doubleValue() > eps){
                 return new SimpleStatus(2, "fund not equal zero");
             }
             capitalAccountRepository.delete(account);

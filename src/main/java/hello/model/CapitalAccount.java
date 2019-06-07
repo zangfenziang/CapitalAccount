@@ -16,6 +16,8 @@ public class CapitalAccount {
     private String status;
     @Column(columnDefinition = "decimal(10,2)")
     private BigDecimal fund;
+    @Column(columnDefinition = "decimal(10,2)")
+    private BigDecimal freezing;
 
     public String getUser_id() {
         return user_id;
@@ -71,5 +73,13 @@ public class CapitalAccount {
 
     public void setFund(BigDecimal fund) {
         this.fund = fund;
+    }
+
+    public BigDecimal getFreezing() {
+        return freezing;
+    }
+
+    public void setFreezing(BigDecimal freezing) {
+        this.freezing = freezing;
     }
 }
