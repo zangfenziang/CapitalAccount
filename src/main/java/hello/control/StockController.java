@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
+@CrossOrigin(origins = "*", allowCredentials="true")
 @RestController
 public class StockController {
 
@@ -109,6 +109,13 @@ public class StockController {
         return setCookie(response, remember_status, cookie, cookieId);
     }
 
+    @RequestMapping("/account_logout")
+    public SimpleStatus accountLogin(HttpServletResponse response){
+        Cookie cookie = new Cookie(AccountCookieName, "");
+        Cookie cookieId = new Cookie(AccountCookieIdName, "");
+        return setCookie(response, 0, cookie, cookieId);
+    }
+
     @RequestMapping("/account_login_status")
     public SimpleStatus getAccountLoginStatus(@CookieValue(value = AccountCookieIdName, defaultValue = "") String id
             , @CookieValue(value = AccountCookieName, defaultValue = "") String cookie){
@@ -158,6 +165,8 @@ public class StockController {
     public SimpleStatus getAccountFund(@CookieValue(value = AccountCookieIdName, defaultValue = "") String id
             , @CookieValue(value = AccountCookieName, defaultValue = "") String cookie){
         try{
+            System.out.println(id);
+            System.out.println(cookie);
             CapitalAccount account = getAccount(id, cookie);
             return new SimpleStatus(0, account.getFund().toString());
         }
