@@ -1,20 +1,25 @@
 package hello.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Table(name = "stock_account_legal_user")
 public class CapitalAccountLegalUser {
     @Id
     private String account_id;
     private String legal_num;
     private String license_num;
     private String legal_name;
+    @Column(name = "legal_idnum")
     private String legal_id_num;
     private String legal_address;
     private String legal_phone;
     private String authorize_name;
+    @Column(name = "authorize_idnum")
     private String authorize_id_num;
     private String authorize_address;
     private String authorize_phone;

@@ -1,10 +1,13 @@
 package hello.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Table(name = "stock_account_personal_user")
 public class CapitalAccountPersonalUser {
     @Id
     private String account_id;
@@ -18,6 +21,7 @@ public class CapitalAccountPersonalUser {
     private String organization;
     private String phone_num;
     private boolean agency;
+    @Column(name = "agent_idnum")
     private String agent_id_num;
 
     public CapitalAccountPersonalUser(){}

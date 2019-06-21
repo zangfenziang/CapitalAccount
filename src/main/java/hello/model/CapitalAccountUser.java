@@ -2,12 +2,16 @@ package hello.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "stock_account_user")
 public class CapitalAccountUser {
     @Id
     private String account_id;
     private String account_type;
+    private String status;
+    private String id;
 
     public String getAccount_id() {
         return account_id;
@@ -23,5 +27,21 @@ public class CapitalAccountUser {
 
     public void setAccount_type(String account_type) {
         this.account_type = account_type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

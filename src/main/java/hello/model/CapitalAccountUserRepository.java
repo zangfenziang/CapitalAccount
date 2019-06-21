@@ -10,4 +10,6 @@ import java.util.List;
 public interface CapitalAccountUserRepository extends CrudRepository<CapitalAccountUser, Integer> {
     @Query(value = "select p from CapitalAccountUser p where p.account_id = ?1")
     List<CapitalAccountUser> getUserById(String id);
+    @Query(value = "select p from CapitalAccountUser p where p.id = ?1")
+    List<CapitalAccountUser> getUserByNameId(String id);
 }

@@ -398,4 +398,15 @@ public class StockController {
         }
     }
 
+    @RequestMapping("/user_find_by_id")
+    public SimpleStatus findUserById(@RequestParam String id){
+        List<CapitalAccountUser> list = capitalAccountUserRepository.getUserByNameId(id);
+        if (list.size() == 0){
+            return new SimpleStatus(1, "cannot find");
+        }
+        else{
+            return new SimpleStatus(0, list.get(0).getAccount_id());
+        }
+    }
+
 }
