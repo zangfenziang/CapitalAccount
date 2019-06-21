@@ -326,6 +326,7 @@ public class StockController {
         account.setUser_id(user_id);
         account.setID(id);
         account.setFund(new BigDecimal(0));
+        account.setFreezing(new BigDecimal(0));
         account.setLogin_pwd(login_pwd);
         account.setSecurities_id(securities_id);
         account.setStatus(NormalStatus);
